@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
 import Completed from '../screens/Completed';
 import { StyleSheet } from 'react-native';
+import {Iconify } from 'react-native-iconify'
 
 const Tab = createBottomTabNavigator();
 
@@ -20,12 +21,22 @@ function MyTabs() {
                     let iconName;
 
                     if (route.name === 'Home') {
-                        iconName = focused ? 'ios-information-circle' : 'ios-information-circle-outline';
+                        if (iconName = focused) {
+                            return <Iconify icon="ic:outline-pending-actions" size={24} color={Colors.primary}/>
+                        } else {
+                            return <Iconify icon="ic:outline-pending-actions" size={24}/>
+                        }
+                        
                     } else if (route.name === 'Settings') {
-                        iconName = focused ? 'settings' : 'settings-outline';
+                        if (iconName = focused) {
+                            return <Iconify icon="ant-design:file-done-outlined" size={24} color={Colors.primary}/>
+                        } else {
+                            return <Iconify icon="ant-design:file-done-outlined" size={24}/>
+                        }
+                        
                     }
 
-                    return <Icon name={iconName} size={20} color={color} />;
+                    //return <Iconify icon={iconName} size={20} color={color} />;
                 },
                 tabBarActiveTintColor: Colors.primary,
             })}

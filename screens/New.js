@@ -110,7 +110,7 @@ const New = ({ navigation }) => {
             setIsLoading(true)
             //console.log('loading')
 
-            await axios.post('http://192.168.43.41:8000/api/v1/post/add', config, headers).then((resp) => {
+            await axios.post(Colors.url + 'post/add', config, headers).then((resp) => {
                 setIsLoading(false)
                 let trig = date - Date.now() - 259200000
                 Notifications.scheduleNotificationAsync({

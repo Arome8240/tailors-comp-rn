@@ -58,7 +58,7 @@ export default function Signup({ navigation }) {
                 console.log('Passwords do not match!')
             } else {
                 setIsLoading(true)
-                const response = await axios.post('http://192.168.43.41:8000/api/v1/auth/signup', config, headers)
+                const response = await axios.post(Colors.url + 'auth/signup', config, headers)
                 setIsLoading(false)
                 navigation.navigate('Log')
                 console.log(JSON.stringify(response))

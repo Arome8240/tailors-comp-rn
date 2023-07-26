@@ -2,29 +2,30 @@ import { View, Text, Image } from 'react-native'
 import React from 'react'
 import AppIntroSlider from 'react-native-app-intro-slider'
 import { SIZES, COLORS } from '../src/assets/constants/theme'
+import Colors from '../constants/Colors'
 
 const slides = [
     {
         id: 1,
-        title: 'Discover the best places',
-        desc: 'A town hall different from bala blu, blue blu bulaba. broom broom broom brooooooooom. Bala blu blue blu bulaba. The farmers will make more money. Your lunch will not be imported, cassava garri ewa and ehhh ehhhhnn. The farmer will make money, the dinner would be cassava, eba, ewa and everything.',
+        title: 'Welcome to MeasureMaster',
+        desc: 'Welcome to MeasureMaster, your ultimate companion for precision measurements! Our app is designed with a focus on user experience, offering an intuitive and sleek UI that makes measuring a breeze. Whether you\'re a professional contractor, DIY enthusiast, or simply someone who values accurate measurements, MeasureMaster is here to streamline your workflow and elevate your projects to new heights.',
         image: require('../src/assets/0.png')
     },
     {
         id: 3,
-        title: 'Discover the best places',
-        desc: 'A town hall different from bala blu, blue blu bulaba. broom broom broom brooooooooom. Bala blu blue blu bulaba. The farmers will make more money. Your lunch will not be imported, cassava garri ewa and ehhh ehhhhnn. The farmer will make money, the dinner would be cassava, eba, ewa and everything.',
+        title: 'Seamless Syncing',
+        desc: 'MeasureMaster empowers you to take your measurements with you, wherever you go. Our seamless syncing feature ensures that your measurements are securely stored in the cloud, allowing you to retrieve them instantly from any device. Whether you\'re on your smartphone at the worksite or on your tablet at home, your measurements are at your fingertips, ready to assist you in every step of your project.',
         image: require('../src/assets/1.png')
     },
     {
         id: 2,
-        title: 'Discover the best places',
-        desc: 'A town hall different from bala blu, blue blu bulaba. broom broom broom brooooooooom. Bala blu blue blu bulaba. The farmers will make more money. Your lunch will not be imported, cassava garri ewa and ehhh ehhhhnn. The farmer will make money, the dinner would be cassava, eba, ewa and everything.',
-        image: require('../src/assets/2.png')
+        title: 'Stay On Top of Your Jobs',
+        desc: 'Never miss a beat with MeasureMaster\'s powerful notification system. Stay organized and informed with timely reminders of pending jobs and important project milestones. Our push notification feature ensures that you\'re always aware of upcoming deadlines, so you can manage your projects efficiently and deliver outstanding results, all without the stress of keeping track of every detail.',
+        image: require('../src/assets/2.svg')
     }
 ]
 
-export default function Onboard({navigation}) {
+export default function Onboard({ navigation }) {
 
     const buttonLabel = (label) => {
         return (
@@ -89,7 +90,7 @@ export default function Onboard({navigation}) {
                 )
             }}
             activeDotStyle={{
-                backgroundColor: COLORS.primary,
+                backgroundColor: Colors.primary,
                 width: 20
             }}
             showSkipButton
@@ -97,10 +98,10 @@ export default function Onboard({navigation}) {
             renderSkipButton={() => buttonLabel('Skip')}
             renderDoneButton={() => buttonLabel('Done')}
             onDone={() => {
-                navigation.navigate('ho')
+                navigation.navigate('Log')
             }}
             onSkip={() => {
-                navigation.navigate('ho')
+                navigation.navigate('Log')
             }}
         />
     )

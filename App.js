@@ -36,7 +36,7 @@ import Edit from './screens/Edit';
 const Stack = createNativeStackNavigator();
 
 //Interstitial Ads
-const interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
+const interstitial = InterstitialAd.createForAdRequest('ca-app-pub-6609715251129979/3712535483', {
   requestNonPersonalizedAdsOnly: true,
   //keywords: ['fashion', 'clothing'],
 })
@@ -69,14 +69,14 @@ export default function App() {
 
   const insta = () => {
     //Admob
-  const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
-    interstitial.show()
-  });
+    const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+      interstitial.show()
+    });
 
-  interstitial.load()
+    interstitial.load()
 
-  // Unsubscribe from events on unmount
-  return unsubscribe;
+    // Unsubscribe from events on unmount
+    return unsubscribe;
   }
 
 
@@ -100,13 +100,13 @@ export default function App() {
     }
     setData()
 
-    
+
     // Start loading the interstitial straight away
     setInterval(insta, 300000)
 
-    setTimeout(() => {showBans(true)}, 180000)
+    setTimeout(() => { showBans(true) }, 180000)
 
-    
+
 
     //set notification
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
@@ -237,10 +237,10 @@ export default function App() {
           </Stack.Navigator>
           {
             bans && <BannerAd
-            unitId={TestIds.BANNER}
-            size={BannerAdSize.FULL_BANNER}
-            style={{ position: 'absolute', bottom: 0 }}
-          />
+              unitId='ca-app-pub-6609715251129979/4992101522'
+              size={BannerAdSize.FULL_BANNER}
+              style={{ position: 'absolute', bottom: 0 }}
+            />
           }
         </NavigationContainer>
       )

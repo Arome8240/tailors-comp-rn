@@ -1,5 +1,5 @@
-import { Text, TextInput, TouchableOpacity, View, ActivityIndicator } from 'react-native'
-import React, { Component, useState } from 'react'
+import { Text, TextInput, TouchableOpacity,BackHandler, View, ActivityIndicator } from 'react-native'
+import React, { Component, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 //Constants
@@ -8,13 +8,14 @@ import FontSize from '../constants/FontSize'
 import Colors from '../constants/Colors'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 
 export default function Forgot({ navigation }) {
 
     const [email, setEmail] = useState()
     const [focused, setFocus] = useState()
     const [loading, setLoading] = useState(false)
+    const nav = useNavigation()
 
     const reset = async () => {
         //console.log(email)
@@ -25,7 +26,7 @@ export default function Forgot({ navigation }) {
             email: email
         }
         setLoading(true)
-        axios.post('http://192.168.43.41:8000/api/v1/auth/forgot-password', config)
+        axios.post(Colors.url + 'auth/forgot-password', config)
         .then(resp => {
             console.log(resp.data)
             setLoading(false)

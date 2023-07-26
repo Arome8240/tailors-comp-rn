@@ -39,7 +39,7 @@ export default function Otp({ navigation }) {
             email: route.params.email,
             otp: ot
         }
-        axios.post('http://192.168.43.41:8000/api/v1/auth/otp/verify', config)
+        axios.post(Colors.url + 'auth/otp/verify', config)
         .then(resp => {
             console.log(resp.data)
             const verified = resp.data.verified

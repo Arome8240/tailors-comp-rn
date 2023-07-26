@@ -54,12 +54,12 @@ export default function Login({ navigation }) {
             setIsLoading(true)
             //console.log('loading')
 
-            const response = await axios.post('http://192.168.43.41:8000/api/v1/auth/login', config).then((resp) => {
+            const response = await axios.post(Colors.url +'auth/login', config).then((resp) => {
                 //console.log(JSON.stringify(resp))
                 setIsLoading(false)
                 let token = JSON.stringify(resp.data.token)
                 AsyncStorage.setItem('token', token)
-                console.log(token)
+                //console.log(token)
                 navigation.navigate('ho')
             }).catch((error) => {
                 if (error.response) {

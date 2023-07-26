@@ -12,7 +12,7 @@ export default function Views({ navigation }) {
     let [meas, setMeas] = useState()
     const [isLoading, setLoading] = useState(true)
 
-    let url = 'http://192.168.43.41:8000/api/v1/'
+    let url = Colors.url
 
     let route = useRoute()
 

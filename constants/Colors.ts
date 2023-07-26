@@ -15,4 +15,5 @@ export default {
   borderWithOpacity: "#1f41bb",
   lightPrimary: lightBlue,
   gray: gray,
+  url: 'https://tailor-backend.onrender.com/api/v1/'
 };

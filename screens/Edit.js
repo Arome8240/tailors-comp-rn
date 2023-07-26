@@ -1,7 +1,8 @@
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation, NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import axios from 'axios';
 
@@ -18,8 +19,9 @@ import RNDateTimePicker, { DateTimePickerAndroid } from '@react-native-community
 export default function Edit({ navigation }) {
 
     let route = useRoute()
+    let navi = useNavigation()
 
-    let url = 'http://192.168.43.41:8000/api/v1/'
+    let url = Colors.url
 
     //Get Measurements
     const getData = async () => {
@@ -34,7 +36,7 @@ export default function Edit({ navigation }) {
         }
 
         await axios.get(url + `post/${id}`, headers).then(resp => {
-            console.log(resp.data)
+            //console.log(resp.data)
             setPre(false)
             setName(resp.data.name)
             setGender(resp.data.gender)
@@ -50,7 +52,7 @@ export default function Edit({ navigation }) {
             setText(fDate)
             setDate(tempDate)
 
-            console.log(text)
+            //console.log(text)
         }).catch(err => {
             setPre(false)
         })

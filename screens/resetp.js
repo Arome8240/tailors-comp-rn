@@ -33,7 +33,7 @@ export default function ResetP({ navigation }) {
                 password: password
             }
             setLoading(true)
-            axios.post('http://192.168.43.41:8000/api/v1/auth/password/new', config)
+            axios.post(Colors.url + 'auth/password/new', config)
             .then(resp => {
                 console.log(resp.data)
                 setLoading(false)

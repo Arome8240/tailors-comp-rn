@@ -9,6 +9,7 @@ import Dialog from 'react-native-dialog'
 //Realm Database
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Notifications from 'expo-notifications';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Home({ navigation }) {
 
@@ -36,7 +37,7 @@ export default function Home({ navigation }) {
     })
   }, []);
 
-  let url = 'http://192.168.43.41:8000/api/v1/'
+  let url = Colors.url
 
   //Get Measurements
   const getData = async () => {
@@ -58,10 +59,18 @@ export default function Home({ navigation }) {
     })
   }
 
-  useEffect(() => {
-    getToks()
-    getData()
-  }, [])
+  useFocusEffect(
+    React.useCallback(() => {
+      getToks()
+      getData()
+      
+  
+      /*const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      )*/
+    }, [])
+  )
 
   const [dia, setDia] = useState(false)
   const [id, setId] = useState('')
@@ -201,7 +210,7 @@ export default function Home({ navigation }) {
                 fontFamily: 'Poppins-Regular'
               }}
             >
-              Pending
+              Completed
             </Text>
             {liz.filter((item) => {
               return search.toLowerCase === ''

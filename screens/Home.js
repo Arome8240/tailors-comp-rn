@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TextInput, Modal, RefreshControl, TouchableOpacity, BackHandler, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { View, Text, SafeAreaView, TextInput, Modal, RefreshControl, TouchableOpacity, Alert, KeyboardAvoidingView, ScrollView,BackHandler  } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Colors from '../constants/Colors'
@@ -9,6 +9,7 @@ import Dialog from 'react-native-dialog'
 //Realm Database
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Notifications from 'expo-notifications';
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 export default function Home({ navigation }) {
 
@@ -21,6 +22,8 @@ export default function Home({ navigation }) {
 
   const [isPend, setPend] = useState(true)
   const [toks, setToks] = useState()
+
+  const navi = useNavigation()
 
   const getToks = async () => {
     const token = await AsyncStorage.getItem('token')
@@ -36,7 +39,7 @@ export default function Home({ navigation }) {
     })
   }, []);
 
-  let url = 'http://192.168.43.41:8000/api/v1/'
+  let url = Colors.url
 
   //Get Measurements
   const getData = async () => {
@@ -58,10 +61,40 @@ export default function Home({ navigation }) {
     })
   }
 
-  useEffect(() => {
-    getToks()
-    getData()
-  }, [])
+  useFocusEffect(
+    React.useCallback(() => {
+      getToks()
+     getData()
+     
+     const backAction = () => {
+       Alert.alert(
+         "Exit App",
+         "Are you sure you want to exit the app?",
+         [
+           {
+             text: 'Cancel',
+             onPress: () => {
+               return null
+             },
+             style: 'cancel'
+           },
+           {
+             text: 'Confirm',
+             onPress: () => {
+               return BackHandler.exitApp()
+             }
+           }
+         ]
+       )
+       return true
+     }
+ 
+     const backHandler = BackHandler.addEventListener(
+       "hardwareBackPress",
+       backAction
+     )
+   }, [])
+  )
 
   const [dia, setDia] = useState(false)
   const [id, setId] = useState('')
