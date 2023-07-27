@@ -14,10 +14,10 @@ const Privacy = () => {
           height: '100%'
         }}
       >
-        <Text>Privacy Policy for [App Name]</Text>
+        <Text>Privacy Policy for Measurement App</Text>
 
         <Text>
-          At [App Name], we are committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, and disclose your information when you use our app.
+          At Measurement App, we are committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, and disclose your information when you use our app.
         </Text>
 
         <View

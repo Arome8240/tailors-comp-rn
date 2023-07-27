@@ -29,6 +29,7 @@ export default function Signup({ navigation }) {
     const [password, setPassword] = useState()
     const [phone, setPhone] = useState()
     const [confPass, setConPass] = useState()
+    const [uFocus, setUFocus] = useState()
 
     //loading state
     const [isLoading, setIsLoading] = useState(false)
@@ -43,6 +44,7 @@ export default function Signup({ navigation }) {
 
         const config = {
             email: email,
+            username: username,
             phone: phone,
             password: password
         }
@@ -128,15 +130,15 @@ export default function Signup({ navigation }) {
                                 backgroundColor: Colors.lightPrimary,
                                 borderRadius: Spacing
                             },
-                            focused && { borderWidth: 3, borderColor: '#3A88E2' }
+                            uFocus && { borderWidth: 3, borderColor: '#3A88E2' }
                             ]}
                         />
                         <TextInput
-                            onFocus={() => setFocus(true)}
-                            onBlur={() => setFocus(false)}
+                            onFocus={() => setUFocus(true)}
+                            onBlur={() => setUFocus(false)}
                             placeholder='Username'
                             placeholderTextColor={Colors.darkText}
-                            onChangeText={text => setEmail(text)}
+                            onChangeText={text => setUN(text)}
                             value={email}
                             style={[{
                                 fontFamily: 'Poppins-Regular',

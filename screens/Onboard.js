@@ -7,20 +7,20 @@ import Colors from '../constants/Colors'
 const slides = [
     {
         id: 1,
-        title: 'Welcome to MeasureMaster',
-        desc: 'Welcome to MeasureMaster, your ultimate companion for precision measurements! Our app is designed with a focus on user experience, offering an intuitive and sleek UI that makes measuring a breeze. Whether you\'re a professional contractor, DIY enthusiast, or simply someone who values accurate measurements, MeasureMaster is here to streamline your workflow and elevate your projects to new heights.',
+        title: 'Welcome to Measurement App',
+        desc: 'Welcome to Measurement App, your ultimate companion for precision measurements! Our app is designed with a focus on user experience, offering an intuitive and sleek UI that makes measuring a breeze. Whether you\'re a professional contractor, DIY enthusiast, or simply someone who values accurate measurements, Measurement App is here to streamline your workflow and elevate your projects to new heights.',
         image: require('../src/assets/0.png')
     },
     {
         id: 3,
         title: 'Seamless Syncing',
-        desc: 'MeasureMaster empowers you to take your measurements with you, wherever you go. Our seamless syncing feature ensures that your measurements are securely stored in the cloud, allowing you to retrieve them instantly from any device. Whether you\'re on your smartphone at the worksite or on your tablet at home, your measurements are at your fingertips, ready to assist you in every step of your project.',
+        desc: 'Measurement App empowers you to take your measurements with you, wherever you go. Our seamless syncing feature ensures that your measurements are securely stored in the cloud, allowing you to retrieve them instantly from any device. Whether you\'re on your smartphone at the worksite or on your tablet at home, your measurements are at your fingertips, ready to assist you in every step of your project.',
         image: require('../src/assets/1.png')
     },
     {
         id: 2,
         title: 'Stay On Top of Your Jobs',
-        desc: 'Never miss a beat with MeasureMaster\'s powerful notification system. Stay organized and informed with timely reminders of pending jobs and important project milestones. Our push notification feature ensures that you\'re always aware of upcoming deadlines, so you can manage your projects efficiently and deliver outstanding results, all without the stress of keeping track of every detail.',
+        desc: 'Never miss a beat with Measurement App\'s powerful notification system. Stay organized and informed with timely reminders of pending jobs and important project milestones. Our push notification feature ensures that you\'re always aware of upcoming deadlines, so you can manage your projects efficiently and deliver outstanding results, all without the stress of keeping track of every detail.',
         image: require('../src/assets/2.svg')
     }
 ]
