@@ -65,6 +65,7 @@ export default function Login({ navigation }) {
                 if (error.response) {
                     setIsLoading(false)
                     console.log(error.response.data.message)
+                    ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
                 }   else if (error.request) {
                     //console.log(error.request)
                 }   else {

@@ -21,7 +21,7 @@ const New = ({ navigation }) => {
     const [passFocus, setPassFocus] = useState(false)
     const [conPassFocus, setConPassFocus] = useState(false)
 
-    const [formVal, setFormVal] = useState([{ name: '', value: '' }])
+    const [formVal, setFormVal] = useState([{ name: 'Height', value: '20' }, {name: '', value: ''}])
 
     const addRow = () => {
         setFormVal([...formVal, { name: '', value: '' }])
@@ -110,24 +110,44 @@ const New = ({ navigation }) => {
             setIsLoading(true)
             //console.log('loading')
 
-            await axios.post(Colors.url + 'post/add', config, headers).then((resp) => {
+            const response = await axios.post(Colors.url + 'post/add', config, headers).then((resp) => {
                 setIsLoading(false)
-                let trig = date - Date.now() - 259200000
+                console.log(resp.data)
+                navigation.navigate('ho')
+                const now = new Date();
+                const deadline = new Date(deadlineDate);
+                const threeDaysBefore = new Date(date - 3 * 24 * 60 * 60 * 1000);
+
                 Notifications.scheduleNotificationAsync({
                     content: {
-                      title: 'Look at that notification',
-                      body: "I'm so proud of myself!",
+                        title: 'Reminder',
+                        body: 'You have a client notification due in 3 days!',
+                        data: {}, // You can pass additional data to handle the notification
                     },
-                    trigger: {
-                      seconds: trig
-                    },
-                  });
-                //console.log(resp)
-                navigation.navigate('ho')
+                    trigger: threeDaysBefore,
+                });
+
+                console.log('Notification scheduled successfully!');
+
+                if (threeDaysBefore > now) {
+                    // Schedule the notification
+                    Notifications.scheduleNotificationAsync({
+                        content: {
+                            title: 'Reminder',
+                            body: 'You have a client notification due in 3 days!',
+                            data: {}, // You can pass additional data to handle the notification
+                        },
+                        trigger: threeDaysBefore,
+                    });
+
+                    console.log('Notification scheduled successfully!');
+                } else {
+                    console.log('The deadline is too close for a 3-day reminder notification.');
+                }
             }).catch((error) => {
                 if (error.response) {
                     setIsLoading(false)
-                    console.log(error.response)
+                    console.log(error.response.data)
                 } else if (error.request) {
                     //console.log(error.request)
                 } else {
@@ -276,6 +296,7 @@ const New = ({ navigation }) => {
                                         <TextInput
                                             placeholder='value'
                                             value={item.value || ''}
+                                            keyboardType='number-pad'
                                             style={{
                                                 borderWidth: 1,
                                                 width: 130,

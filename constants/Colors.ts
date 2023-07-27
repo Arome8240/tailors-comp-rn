@@ -17,3 +17,7 @@ export default {
   gray: gray,
   url: 'https://tailor-backend.onrender.com/api/v1/'
 };
+
+
+//https://tailor-backend.onrender.com
+//http://192.168.43.42:8000
