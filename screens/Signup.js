@@ -55,6 +55,8 @@ export default function Signup({ navigation }) {
             }
         }
 
+        //console.log(config)
+
         try {
             if (password != confPass) {
                 console.log('Passwords do not match!')
@@ -130,7 +132,7 @@ export default function Signup({ navigation }) {
                                 backgroundColor: Colors.lightPrimary,
                                 borderRadius: Spacing
                             },
-                            uFocus && { borderWidth: 3, borderColor: '#3A88E2' }
+                            focused && { borderWidth: 3, borderColor: '#3A88E2' }
                             ]}
                         />
                         <TextInput
@@ -139,7 +141,7 @@ export default function Signup({ navigation }) {
                             placeholder='Username'
                             placeholderTextColor={Colors.darkText}
                             onChangeText={text => setUN(text)}
-                            value={email}
+                            value={username}
                             style={[{
                                 fontFamily: 'Poppins-Regular',
                                 fontSize: FontSize.small,
@@ -148,7 +150,7 @@ export default function Signup({ navigation }) {
                                 backgroundColor: Colors.lightPrimary,
                                 borderRadius: Spacing
                             },
-                            focused && { borderWidth: 3, borderColor: '#3A88E2' }
+                            uFocus && { borderWidth: 3, borderColor: '#3A88E2' }
                             ]}
                         />
                         <TextInput

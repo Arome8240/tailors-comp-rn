@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator, Image } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator, Image, ToastAndroid } from 'react-native'
 import React, { useState, useEffect } from 'react'
 //Constants
 import Spacing from './../constants/Spacing';
@@ -12,6 +12,8 @@ import axios from 'axios';
 import DropdownSelect from 'react-native-input-select';
 import RNDateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+//Notification
+import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 
 const New = ({ navigation }) => {
@@ -21,7 +23,7 @@ const New = ({ navigation }) => {
     const [passFocus, setPassFocus] = useState(false)
     const [conPassFocus, setConPassFocus] = useState(false)
 
-    const [formVal, setFormVal] = useState([{ name: 'Height', value: '20' }, {name: '', value: ''}])
+    const [formVal, setFormVal] = useState([{ name: 'Height', value: '20' }, { name: '', value: '' }])
 
     const addRow = () => {
         setFormVal([...formVal, { name: '', value: '' }])
@@ -110,44 +112,50 @@ const New = ({ navigation }) => {
             setIsLoading(true)
             //console.log('loading')
 
-            const response = await axios.post(Colors.url + 'post/add', config, headers).then((resp) => {
+            const response = await axios.post(Colors.url + 'post/add', config, headers).then(async (resp) => {
                 setIsLoading(false)
-                console.log(resp.data)
+                //console.log(resp.data)
                 navigation.navigate('ho')
                 const now = new Date();
-                const deadline = new Date(deadlineDate);
                 const threeDaysBefore = new Date(date - 3 * 24 * 60 * 60 * 1000);
 
-                Notifications.scheduleNotificationAsync({
-                    content: {
-                        title: 'Reminder',
-                        body: 'You have a client notification due in 3 days!',
-                        data: {}, // You can pass additional data to handle the notification
-                    },
-                    trigger: threeDaysBefore,
-                });
+                if (Device.isDevice) {
+                    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+                    let finalStatus = existingStatus;
+                    if (existingStatus !== 'granted') {
+                        const { status } = await Notifications.requestPermissionsAsync();
+                        finalStatus = status;
+                    }
+                    if (finalStatus !== 'granted') {
+                        alert('Failed to get push token for push notification!');
+                        return;
+                    }
+                    if (threeDaysBefore > now) {
+                        // Schedule the notification
+                        Notifications.scheduleNotificationAsync({
+                            content: {
+                                title: 'Reminder',
+                                body: 'You have a client notification due in 3 days!',
+                                data: {}, // You can pass additional data to handle the notification
+                            },
+                            trigger: threeDaysBefore
+                        });
 
-                console.log('Notification scheduled successfully!');
-
-                if (threeDaysBefore > now) {
-                    // Schedule the notification
-                    Notifications.scheduleNotificationAsync({
-                        content: {
-                            title: 'Reminder',
-                            body: 'You have a client notification due in 3 days!',
-                            data: {}, // You can pass additional data to handle the notification
-                        },
-                        trigger: threeDaysBefore,
-                    });
-
-                    console.log('Notification scheduled successfully!');
+                        console.log('Notification scheduled successfully!');
+                    } else {
+                        console.log('The deadline is too close for a 3-day reminder notification.');
+                    }
                 } else {
-                    console.log('The deadline is too close for a 3-day reminder notification.');
+                    alert('Must use physical device for Push Notifications');
                 }
+
+
+
             }).catch((error) => {
                 if (error.response) {
                     setIsLoading(false)
-                    console.log(error.response.data)
+                    //console.log(error.response.data)
+                    ToastAndroid.show('Please fill all required fields', ToastAndroid.SHORT)
                 } else if (error.request) {
                     //console.log(error.request)
                 } else {
