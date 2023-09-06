@@ -1,201 +1,231 @@
-import { View, Text, SafeAreaView, TextInput, Modal, RefreshControl, TouchableOpacity, Alert, KeyboardAvoidingView, ScrollView,BackHandler  } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import Icon from 'react-native-vector-icons/FontAwesome5'
-import Colors from '../constants/Colors'
-import axios from 'axios'
-import moment from 'moment'
-import Dialog from 'react-native-dialog'
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TextInput,
+  Modal,
+  RefreshControl,
+  TouchableOpacity,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  BackHandler,
+} from "react-native";
+import React, { useState, useEffect } from "react";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import Colors from "../constants/Colors";
+import axios from "axios";
+import moment from "moment";
+import Dialog from "react-native-dialog";
 
 //Realm Database
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import * as Notifications from 'expo-notifications';
-import { useNavigation, useFocusEffect } from '@react-navigation/native'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Notifications from "expo-notifications";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 export default function Home({ navigation }) {
+  const [task, setTask] = useState();
+  const [liz, setLiz] = useState([]);
+  const [openModel, setModal] = useState(false);
 
-  const [task, setTask] = useState()
-  const [liz, setLiz] = useState([])
-  const [openModel, setModal] = useState(false)
+  const [searchFocus, setSearchFocus] = useState(false);
+  const [search, setSearch] = useState("");
 
-  const [searchFocus, setSearchFocus] = useState(false)
-  const [search, setSearch] = useState('')
+  const [isPend, setPend] = useState(true);
+  const [toks, setToks] = useState();
 
-  const [isPend, setPend] = useState(true)
-  const [toks, setToks] = useState()
-
-  const navi = useNavigation()
+  const navi = useNavigation();
 
   const getToks = async () => {
-    const token = await AsyncStorage.getItem('token')
-    setToks(token)
-  }
+    const token = await AsyncStorage.getItem("token");
+    setToks(token);
+  };
 
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getData().then(res => {
-      setRefreshing(false)
-    })
+    getData().then((res) => {
+      setRefreshing(false);
+    });
   }, []);
 
-  let url = Colors.url
+  let url = Colors.url;
 
   //Get Measurements
   const getData = async () => {
-    const token = await AsyncStorage.getItem('token')
+    const token = await AsyncStorage.getItem("token");
     const headers = {
       headers: {
-        'Content-Type': 'application/json',
-        'token': token.slice(1, -1)
-      }
-    }
-    await axios.get(url + 'post/', headers).then(resp => {
-      //console.log(resp.data.posts)
-      let filt = resp.data.posts
-      setLiz(filt.filter(t => {
-        return t.completed === false
-      }))
-    }).catch(err => {
-
-    })
-  }
+        "Content-Type": "application/json",
+        token: token.slice(1, -1),
+      },
+    };
+    await axios
+      .get(url + "post/", headers)
+      .then((resp) => {
+        //console.log(resp.data.posts)
+        let filt = resp.data.posts;
+        setLiz(
+          filt.filter((t) => {
+            return t.completed === false;
+          })
+        );
+      })
+      .catch((err) => {});
+  };
 
   useFocusEffect(
     React.useCallback(() => {
-      getToks()
-     getData()
-     
-     const backAction = () => {
-       Alert.alert(
-         "Exit App",
-         "Are you sure you want to exit the app?",
-         [
-           {
-             text: 'Cancel',
-             onPress: () => {
-               return null
-             },
-             style: 'cancel'
-           },
-           {
-             text: 'Confirm',
-             onPress: () => {
-               return BackHandler.exitApp()
-             }
-           }
-         ]
-       )
-       return true
-     }
- 
-     const backHandler = BackHandler.addEventListener(
-       "hardwareBackPress",
-       backAction
-     )
-   }, [])
-  )
+      getToks();
+      getData();
 
-  const [dia, setDia] = useState(false)
-  const [id, setId] = useState('')
+      const backAction = () => {
+        Alert.alert("Exit App", "Are you sure you want to exit the app?", [
+          {
+            text: "Cancel",
+            onPress: () => {
+              return null;
+            },
+            style: "cancel",
+          },
+          {
+            text: "Confirm",
+            onPress: () => {
+              return BackHandler.exitApp();
+            },
+          },
+        ]);
+        return true;
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
+    }, [])
+  );
+
+  const [dia, setDia] = useState(false);
+  const [id, setId] = useState("");
 
   const cancelDia = () => {
-    setDia(false)
-  }
+    setDia(false);
+  };
+
+  const noty = async () => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: "Here is the notification body",
+        data: { data: "goes here" },
+      },
+      trigger: { seconds: 2 },
+    });
+  };
 
   const openDia = async (_id) => {
-    await setId(_id)
+    await setId(_id);
     //console.log(id)
-    setDia(true)
-  }
+    setDia(true);
+  };
 
   const confirmDia = async () => {
-    const token = await AsyncStorage.getItem('token')
+    const token = await AsyncStorage.getItem("token");
     const headers = {
       headers: {
-        'Content-Type': 'application/json',
-        'token': token.slice(1, -1)
-      }
-    }
-    await axios.delete(url + `post/${id}`, headers).then(resp => {
-      setLiz(liz.filter(t => {
-        return t._id !== id
-      }))
-      setDia(false)
-      setId('')
-    })
-  }
+        "Content-Type": "application/json",
+        token: token.slice(1, -1),
+      },
+    };
+    await axios.delete(url + `post/${id}`, headers).then((resp) => {
+      setLiz(
+        liz.filter((t) => {
+          return t._id !== id;
+        })
+      );
+      setDia(false);
+      setId("");
+    });
+  };
 
   let setComp = async (_id) => {
-    console.log(_id)
-    const token = await AsyncStorage.getItem('token')
+    console.log(_id);
+    const token = await AsyncStorage.getItem("token");
     const headers = {
       headers: {
-        'Content-Type': 'application/json',
-        'token': token.slice(1, -1)
-      }
-    }
+        "Content-Type": "application/json",
+        token: token.slice(1, -1),
+      },
+    };
     let data = {
       id: _id,
-      completed: true
-    }
-    await axios.put(url + `post/completed/${_id}`, data, headers).then(resp => {
-      setLiz(liz.filter(t => {
-        return t._id !== _id
-      }))
-    })
-  }
+      completed: true,
+    };
+    await axios
+      .put(url + `post/completed/${_id}`, data, headers)
+      .then((resp) => {
+        setLiz(
+          liz.filter((t) => {
+            return t._id !== _id;
+          })
+        );
+      });
+  };
 
   return (
     <View>
-
       <SafeAreaView
         style={{
-          backgroundColor: 'white',
-          height: '100%'
+          backgroundColor: "white",
+          height: "100%",
         }}
       >
-
         {/*Search Field*/}
         <View
           style={{
-            flexDirection: 'row',
-            padding: 10
+            flexDirection: "row",
+            padding: 10,
           }}
         >
           <View
             style={{
-              justifyContent: 'center',
+              justifyContent: "center",
               padding: 5,
-              flex: 1
+              flex: 1,
             }}
-          ><TextInput
+          >
+            <TextInput
               onFocus={() => setSearchFocus(true)}
               onBlur={() => setSearchFocus(false)}
-              placeholder='Search'
+              placeholder="Search"
               style={[
                 {
-                  backgroundColor: 'transparent',
+                  backgroundColor: "transparent",
                   padding: 15,
                   paddingLeft: 30,
-                  color: 'black',
+                  color: "black",
                   borderColor: Colors.primary,
                   borderWidth: 1,
                   borderRadius: 10,
-                  left: 5
+                  left: 5,
                 },
-                searchFocus && { borderWidth: 1, borderColor: Colors.primary, color: 'grey' }
+                searchFocus && {
+                  borderWidth: 1,
+                  borderColor: Colors.primary,
+                  color: "grey",
+                },
               ]}
-              onChangeText={text => setSearch(text)}
+              onChangeText={(text) => setSearch(text)}
               value={search}
             />
             <TouchableOpacity
-              style={{ position: 'absolute', right: 25, top: 25 }}
+              style={{ position: "absolute", right: 25, top: 25 }}
             >
               <Icon
                 name="search"
                 style={{
-                  color: Colors.primary
+                  color: Colors.primary,
                 }}
                 size={15}
                 onPress={() => searchBtn()}
@@ -220,9 +250,9 @@ export default function Home({ navigation }) {
         <View style={{}}>
           <ScrollView
             style={{
-              backgroundColor: '#F3F3F3',
+              backgroundColor: "#F3F3F3",
               padding: 10,
-              height: '100%'
+              height: "100%",
             }}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -231,176 +261,186 @@ export default function Home({ navigation }) {
             <Text
               style={{
                 padding: 5,
-                fontFamily: 'Poppins-Regular'
+                fontFamily: "Poppins-Regular",
               }}
             >
               Pending
             </Text>
-            {liz.filter((item) => {
-              return search.toLowerCase === ''
-                ? item
-                : item.name.toLowerCase().includes(search.toLocaleLowerCase())
-            }).map(({ name, deliveryDate, _id }, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => {
-                  navigation.navigate('view', {
-                    name: name,
-                    id: _id,
-                  })
-                }}
-                style={{
-                  backgroundColor: 'white',
-                  marginBottom: 10,
-                  borderRadius: 10,
-                  shadowColor: Colors.primary,
-                  shadowOffset: {
-                    width: 0,
-                    height: 10,
-                  },
-                  shadowOpacity: 0.3,
-                }}
-              >
-                <View
+            {liz
+              .filter((item) => {
+                return search.toLowerCase === ""
+                  ? item
+                  : item.name
+                      .toLowerCase()
+                      .includes(search.toLocaleLowerCase());
+              })
+              .map(({ name, deliveryDate, _id }, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    navigation.navigate("view", {
+                      name: name,
+                      id: _id,
+                    });
+                  }}
                   style={{
-                    paddingVertical: 5,
-                    flexDirection: 'row'
+                    backgroundColor: "white",
+                    marginBottom: 10,
+                    borderRadius: 10,
+                    shadowColor: Colors.primary,
+                    shadowOffset: {
+                      width: 0,
+                      height: 10,
+                    },
+                    shadowOpacity: 0.3,
                   }}
                 >
                   <View
                     style={{
-                      alignItems: 'center',
-                      marginRight: 20,
-                      padding: 15,
+                      paddingVertical: 5,
+                      flexDirection: "row",
                     }}
                   >
-                    <TouchableOpacity
-                      onPress={() => setComp(_id)}
-                    >
-                      <Icon name='check-circle' size={20} color={Colors.primary} />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: '600',
-                        fontFamily: 'Poppins-Regular',
-                        color: Colors.primary,
-                        marginBottom: 8
-                      }}
-                    >
-                      {name}
-                    </Text>
                     <View
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
+                        alignItems: "center",
+                        marginRight: 20,
+                        padding: 15,
                       }}
                     >
+                      <TouchableOpacity onPress={() => setComp(_id)}>
+                        <Icon
+                          name="check-circle"
+                          size={20}
+                          color={Colors.primary}
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                    <View>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: "600",
+                          fontFamily: "Poppins-Regular",
+                          color: Colors.primary,
+                          marginBottom: 8,
+                        }}
+                      >
+                        {name}
+                      </Text>
                       <View
                         style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          marginRight: 8
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
                         }}
                       >
                         <View
                           style={{
-                            marginRight: 2,
-                            color: Colors.primary
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginRight: 8,
                           }}
                         >
-                          <Icon name='clock' size={12} color={Colors.primary} />
+                          <View
+                            style={{
+                              marginRight: 2,
+                              color: Colors.primary,
+                            }}
+                          >
+                            <Icon
+                              name="clock"
+                              size={12}
+                              color={Colors.primary}
+                            />
+                          </View>
+                          <Text
+                            style={{
+                              fontSize: 13,
+                              fontWeight: "500",
+                              color: Colors.primary,
+                              fontFamily: "Poppins-Regular",
+                              marginLeft: 5,
+                            }}
+                          >
+                            {moment(deliveryDate).endOf("day").fromNow()}
+                          </Text>
                         </View>
-                        <Text
-                          style={{
-                            fontSize: 13,
-                            fontWeight: '500',
-                            color: Colors.primary,
-                            fontFamily: 'Poppins-Regular',
-                            marginLeft: 5
-                          }}
-                        >{moment(deliveryDate).endOf('day').fromNow()}</Text>
                       </View>
                     </View>
-                  </View>
 
-                  <View
-                    style={{
-                      marginLeft: 'auto',
-                      padding: 10
-                    }}
-                  >
-                    <TouchableOpacity
+                    <View
                       style={{
-                        padding: 10
+                        marginLeft: "auto",
+                        padding: 10,
                       }}
-                      onPress={() => openDia(_id)}
                     >
-                      <Icon name='trash' size={15} color='#FF5739' />
-                    </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{
+                          padding: 10,
+                        }}
+                        onPress={() => openDia(_id)}
+                      >
+                        <Icon name="trash" size={15} color="#FF5739" />
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            ))}
+                </TouchableOpacity>
+              ))}
           </ScrollView>
         </View>
-
       </SafeAreaView>
 
       {/* Add Button */}
       <KeyboardAvoidingView
         behavior='platform.OS === "ios" ? "padding" : "height"'
         style={{
-          position: 'relative',
+          position: "relative",
           bottom: 120,
-          width: '100%',
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center'
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "space-around",
+          alignItems: "center",
         }}
       >
         <View
           style={{
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <View
             style={{
-              width: '100%',
+              width: "100%",
               height: 70,
-              flexDirection: 'row',
-              justifyContent: 'space-evenly'
+              flexDirection: "row",
+              justifyContent: "space-evenly",
             }}
           >
-
             <TouchableOpacity
               style={{
-                width: '33%',
-                height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#3A88E2',
+                width: "33%",
+                height: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#3A88E2",
                 width: 60,
                 height: 60,
                 borderRadius: 30,
-                color: 'white',
-                position: 'absolute',
+                color: "white",
+                position: "absolute",
                 left: 150,
                 bottom: 30,
               }}
-              onPress={() => navigation.navigate('New')}
+              onPress={() => navigation.navigate("New")}
             >
               <Icon
-                name='plus'
+                name="plus"
                 size={15}
                 style={{
-                  color: '#fff',
+                  color: "#fff",
                 }}
               />
             </TouchableOpacity>
@@ -408,5 +448,5 @@ export default function Home({ navigation }) {
         </View>
       </KeyboardAvoidingView>
     </View>
-  )
+  );
 }
