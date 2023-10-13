@@ -24,14 +24,14 @@ function MyTabs() {
                         if (iconName = focused) {
                             return <Iconify icon="ic:outline-pending-actions" size={24} color={Colors.primary}/>
                         } else {
-                            return <Iconify icon="ic:outline-pending-actions" size={24}/>
+                            return <Iconify icon="ic:outline-pending-actions" size={24} color={Colors.background}/>
                         }
                         
                     } else if (route.name === 'Settings') {
                         if (iconName = focused) {
                             return <Iconify icon="ant-design:file-done-outlined" size={24} color={Colors.primary}/>
                         } else {
-                            return <Iconify icon="ant-design:file-done-outlined" size={24}/>
+                            return <Iconify icon="ant-design:file-done-outlined" size={24} color={Colors.background}/>
                         }
                         
                     }
@@ -51,9 +51,15 @@ export default MyTabs
 
 const styles = StyleSheet.create({
     tabBarStyle: {
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        height: 70,
-        paddingBottom: 5
+        height: 72,
+        bottom: 2,
+        position: 'absolute',
+        left: 10,
+        right: 10,
+        elevation: 0,
+        borderRadius: 20,
+        backgroundColor: '#191b1f',
+        borderTopColor: 'black',
+        color: 'white'
     }
 })

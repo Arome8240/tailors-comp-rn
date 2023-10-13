@@ -138,7 +138,7 @@ const New = ({ navigation }) => {
                                 body: 'You have a client notification due in 3 days!',
                                 data: {}, // You can pass additional data to handle the notification
                             },
-                            trigger: threeDaysBefore
+                            trigger: {seconds: parseInt(threeDaysBefore)}
                         });
 
                         console.log('Notification scheduled successfully!');

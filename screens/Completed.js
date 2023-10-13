@@ -332,7 +332,7 @@ export default function Home({ navigation }) {
         behavior='platform.OS === "ios" ? "padding" : "height"'
         style={{
           position: 'relative',
-          bottom: 120,
+          bottom: 200,
           width: '100%',
           flexDirection: 'row',
           justifyContent: 'space-around',

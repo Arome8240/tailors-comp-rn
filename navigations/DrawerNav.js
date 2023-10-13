@@ -130,8 +130,7 @@ function CustomDrawer(props) {
           ],
           { cancelable: false}
         )
-        //await AsyncStorage.removeItem('token')
-        //props.navigation.replace("Log");
+
       }} icon={({ focused, color, size }) => <Icon name='log-out-outline' size={20} color={color} />} />
     </DrawerContentScrollView>
   )
