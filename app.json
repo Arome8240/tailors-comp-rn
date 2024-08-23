@@ -31,7 +31,10 @@
       "eas": {
         "projectId": "0895300b-1d3d-4ee8-8427-ac6e04b9ed62"
       }
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   },
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-6609715251129979~7335177928"
